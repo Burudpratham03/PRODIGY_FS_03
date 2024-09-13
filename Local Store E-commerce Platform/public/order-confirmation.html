@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        /* Body and General Layout */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        h2 {
+            font-size: 22px;
+        }
+
+        /* Order Details */
+        .order-details p, .cart-summary p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+
+        .order-details span, .cart-summary span {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .cart-summary .product {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+        }
+
+        .cart-summary .product img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 20px;
+        }
+
+        .cart-summary .product h4 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .total-amount {
+            text-align: right;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Continue Shopping Button */
+        .continue-shopping {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 12px 24px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.3s;
+            display: block;
+            margin: 30px auto 0;
+            width: fit-content;
+        }
+
+        .continue-shopping:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .cart-summary .product {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cart-summary .product img {
+                margin-bottom: 10px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Order Successfully Placed</h1>
+        <div class="order-details">
+            <h2>Order Details</h2>
+            <p><strong>Name:</strong> <span id="order-name"></span></p>
+            <p><strong>Email:</strong> <span id="order-email"></span></p>
+            <p><strong>Address:</strong> <span id="order-address"></span></p>
+            <p><strong>Phone:</strong> <span id="order-phone"></span></p>
+            <p><strong>Order Date:</strong> <span id="order-date"></span></p>
+            <p><strong>Order Time:</strong> <span id="order-time"></span></p>
+        </div>
+
+        <div class="cart-summary">
+            <h2>Cart Summary</h2>
+            <div id="cart-items"></div>
+            <div class="total-amount">
+                Total Amount: ₹<span id="order-total">0</span>
+            </div>
+        </div>
+
+        <a href="home.html" class="continue-shopping" id="continue-shopping-btn">Continue Shopping</a>
+    </div>
+
+    <script>
+        // Product list
+        const products = [
+        { name: 'Apple', price: 100, image: 'http://localhost:3000/images/apple.jpg' },
+        { name: 'Banana', price: 50, image: 'http://localhost:3000/images/banana.jpeg' },
+        { name: 'Orange', price: 75, image: 'http://localhost:3000/images/orange.jpg' },
+        { name: 'Grapes', price: 120, image: 'http://localhost:3000/images/grapes.jpeg' },
+        { name: 'Mango', price: 150, image: 'http://localhost:3000/images/mango.webp' },
+        { name: 'Peach', price: 180, image: 'http://localhost:3000/images/peach.jpg' },
+        { name: 'Pineapple', price: 140, image: 'http://localhost:3000/images/pineapple.jpg' },
+        { name: 'Strawberry', price: 200, image: 'http://localhost:3000/images/strawberry.jpeg' },
+        { name: 'Watermelon', price: 50, image: 'http://localhost:3000/images/Watermelon.jpeg' },
+        { name: 'Cherry', price: 250, image: 'http://localhost:3000/images/Cherry.jpg' },
+
+
+        { name: 'Carrot', price: 80, image: 'http://localhost:3000/images/carrot.avif' },
+        { name: 'Broccoli', price: 90, image: 'http://localhost:3000/images/broccoli.jpeg' },
+        { name: 'Spinach', price: 70, image: 'http://localhost:3000/images/spinach.jpeg' },
+        { name: 'Potato', price: 40, image: 'http://localhost:3000/images/potato.jpeg' },
+        { name: 'Tomato', price: 60, image: 'http://localhost:3000/images/tomato.jpeg' },
+        { name: 'Onion', price: 50, image: 'http://localhost:3000/images/onion.jpeg' },
+        { name: 'Cucumber', price: 40, image: 'http://localhost:3000/images/cucumber.jpeg' },
+        { name: 'Bell Pepper', price: 110, image: 'http://localhost:3000/images/bell+pepper.jpeg' },
+        { name: 'Cauliflower', price: 90, image: 'http://localhost:3000/images/cauliflower.jpeg' },
+        { name: 'Zucchini', price: 100, image: 'http://localhost:3000/images/zucchini.jpeg' },
+
+
+        { name: 'Milk', price: 60, image: 'http://localhost:3000/images/milk.jpeg' },
+        { name: 'Cheese', price: 400, image: 'http://localhost:3000/images/cheese.jpeg' },
+        { name: 'Butter', price: 300, image: 'http://localhost:3000/images/butter.jpeg' },
+        { name: 'Yogurt', price: 80, image: 'http://localhost:3000/images/yogurt.jpeg' },
+        { name: 'Cottage Cheese', price: 350, image: 'http://localhost:3000/images/cottage+cheese.jpg' },
+        { name: 'Cream', price: 200, image: 'http://localhost:3000/images/cream.jpg' },
+        { name: 'Skim Milk', price: 55, image: 'http://localhost:3000/images/skim+milk.jpeg' },
+        { name: 'Kefir', price: 90, image: 'http://localhost:3000/images/kefir.jpeg' },
+        { name: 'Buttermilk', price: 70, image: 'http://localhost:3000/images/buttermilk.jpeg' },
+        { name: 'Ghee', price: 600, image: 'http://localhost:3000/images/ghee.jpeg' },
+
+
+        { name: 'Rice', price: 80, image: 'http://localhost:3000/images/rice.jpeg' },
+        { name: 'Wheat', price: 70, image: 'http://localhost:3000/images/wheat.jpeg' },
+        { name: 'Oats', price: 90, image: 'http://localhost:3000/images/oats.jpeg' },
+        { name: 'Barley', price: 100, image: 'http://localhost:3000/images/barley.jpeg' },
+        { name: 'Quinoa', price: 250, image: 'http://localhost:3000/images/quinoa.jpeg' },
+        { name: 'Millet', price: 120, image: 'http://localhost:3000/images/millet.jpeg' },
+        { name: 'Ragi', price: 130, image: 'http://localhost:3000/images/ragi.jpeg' },
+        { name: 'Amaranth', price: 180, image: 'http://localhost:3000/images/amaranth.jpeg' },
+        { name: 'Chia Seeds', price: 250, image: 'http://localhost:3000/images/chia+seeds.jpeg' },
+        { name: 'Flaxseeds', price: 220, image: 'http://localhost:3000/images/flaxseeds.jpeg' }
+    ];
+        
+
+        function getProductImage(productName) {
+            const product = products.find(p => p.name === productName);
+            return product ? product.image : 'https://via.placeholder.com/150';
+        }
+
+        function displayOrderDetails() { 
+            const orderData = JSON.parse(localStorage.getItem('order')) || {};
+            const cart = orderData.cart || [];
+        
+            // Display order details
+            document.getElementById('order-name').textContent = orderData.name || 'N/A';
+            document.getElementById('order-email').textContent = orderData.email || 'N/A';
+            document.getElementById('order-address').textContent = orderData.address || 'N/A';
+            document.getElementById('order-phone').textContent = orderData.phone || 'N/A';
+            document.getElementById('order-date').textContent = orderData.date || 'N/A';
+            document.getElementById('order-time').textContent = orderData.time || 'N/A';
+        
+            const cartItemsContainer = document.getElementById('cart-items');
+            let totalAmount = 0;
+        
+            cartItemsContainer.innerHTML = ''; // Clear previous items
+            cart.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'product';
+                const productImage = getProductImage(item.name);
+                itemDiv.innerHTML = `
+                    <img src="${productImage}" alt="${item.name}">
+                    <div>
+                        <h4>${item.name}</h4>
+                        <p>Price: ₹${item.price.toFixed(2)}</p>
+                        <p>Quantity: ${item.quantity}</p>
+                        <p>Total: ₹${(item.price * item.quantity).toFixed(2)}</p>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(itemDiv);
+                totalAmount += item.price * item.quantity;
+            });
+        
+            document.getElementById('order-total').textContent = totalAmount.toFixed(2);
+        }
+        
+        document.getElementById('continue-shopping-btn').addEventListener('click', function () {
+            const orderData = JSON.parse(localStorage.getItem('order'));
+            let existingOrders = JSON.parse(localStorage.getItem('orders')) || [];
+        
+            const summarizedOrder = {
+                name: orderData.name,
+                date: orderData.date,
+                time: orderData.time,
+                address: orderData.address,
+                products: orderData.cart,
+                totalPrice: orderData.cart.reduce((total, item) => total + (item.price * item.quantity), 0)
+            };
+        
+            existingOrders.push(summarizedOrder);
+            localStorage.setItem('orders', JSON.stringify(existingOrders));
+        
+            localStorage.removeItem('order');
+            window.location.href = 'order-summary.html';
+        });
+        
+        window.onload = displayOrderDetails;
+        
+    </script>
+</body>
+</html>

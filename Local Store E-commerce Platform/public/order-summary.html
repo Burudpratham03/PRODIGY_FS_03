@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Summary</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #e2e2e2, #ffffff);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        nav {
+            background-color: #4a90e2;
+            padding: 15px;
+            text-align: right;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            margin-right: 20px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #d0e1f9;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 32px;
+            color: #4a90e2;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        /* Product Box Styling */
+        .order-box {
+            background-color: #ffffff;
+            border: 1px solid #e1e1e1;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .order-box:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        /* Product details dropdown */
+        .order-details {
+            display: none;
+            padding-top: 10px;
+            border-top: 1px solid #e1e1e1;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .order-box.active .order-details {
+            display: block;
+        }
+        .highlighted {
+            font-weight: 600;
+            color: #4a90e2;
+        }
+        .order-box .order-details ul {
+            list-style: none;
+            padding: 0;
+        }
+        .order-box .order-details li {
+            background: #f1f1f1;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+        .order-box .order-details li:last-child {
+            margin-bottom: 0;
+        }
+        /* Button Styling */
+        button {
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        button:hover {
+            background-color: #357abd;
+            transform: scale(1.02);
+        }
+        .clear-history-btn {
+            background-color: #ff4d4d;
+            margin-top: 10px;
+        }
+        .clear-history-btn:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="home.html">Home</a>
+    </nav>
+
+    <div class="container">
+        <h1>Order Summary</h1>
+        <div id="orders-container">
+            <!-- Orders will be dynamically inserted here -->
+        </div>
+        <button onclick="continueShopping()">Continue Shopping</button>
+        <button class="clear-history-btn" onclick="clearOrderHistory()">Clear History</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve summarized order data from localStorage
+            let orderData = JSON.parse(localStorage.getItem('orders')) || [];
+        
+            const ordersContainer = document.getElementById('orders-container');
+        
+            const renderOrders = (data) => {
+                ordersContainer.innerHTML = '';
+                data.forEach(order => {
+                    const orderBox = document.createElement('div');
+                    orderBox.classList.add('order-box');
+                    orderBox.setAttribute('draggable', 'true');
+                    orderBox.innerHTML = `
+                        <div><strong>Customer Name:</strong> ${order.name}</div>
+                        <div class="highlighted"><strong>Order Date:</strong> ${order.date}</div>
+                        <div><strong>Order Time:</strong> ${order.time}</div>
+                        <div><strong>Address:</strong> ${order.address}</div>
+                        <div class="order-details">
+                            <h4>Products:</h4>
+                            <ul>
+                                ${order.products.map(product => `
+                                    <li>${product.name} - ₹${product.price.toFixed(2)} x ${product.quantity}</li>
+                                `).join('')}
+                            </ul>
+                            <p><strong>Total Price:</strong> ₹${order.totalPrice.toFixed(2)}</p>
+                            <p><strong>Expected Delivery:</strong> Tomorrow</p>
+                        </div>
+                    `;
+        
+                    // Toggle product details on click
+                    orderBox.addEventListener('click', function() {
+                        orderBox.classList.toggle('active');
+                    });
+        
+                    ordersContainer.appendChild(orderBox);
+                });
+            };
+        
+            // Initial render of the summarized orders
+            renderOrders(orderData);
+        });
+
+        // Continue shopping functionality
+        function continueShopping() {
+            // Redirect to home page
+            window.location.href = 'home.html';
+        }
+
+        // Clear order history
+        function clearOrderHistory() {
+            // Clear localStorage
+            localStorage.removeItem('orders');
+            // Clear the order list display
+            document.getElementById('orders-container').innerHTML = '';
+        }
+        
+        // Fetch Order Summary
+        async function fetchOrderSummary(orderId) {
+            const response = await fetch(`http://localhost:3000/api/order-summary/${orderId}`);
+            const order = await response.json();
+            document.getElementById('orderSummary').innerHTML = `
+                <h2>Order Summary</h2>
+                <p>Order ID: ${order.id}</p>
+                <p>Total: ₹${order.total}</p>
+                ${order.items.map(item => `
+                    <div>
+                        <h3>${item.name}</h3>
+                        <p>Quantity: ${item.quantity}</p>
+                        <p>Price: ₹${item.price}</p>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        window.onload = () => {
+            const orderId = localStorage.getItem('orderId'); // Assuming you store the orderId in local storage
+            fetchOrderSummary(orderId);
+        }
+    </script>
+</body>
+</html>

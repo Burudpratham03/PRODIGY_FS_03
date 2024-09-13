@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout Page</title>
+    <style>
+        /* Basic styling for checkout page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin-top: 0;
+        }
+        .cart-summary {
+            margin-bottom: 20px;
+        }
+        .cart-summary table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .cart-summary table, .cart-summary th, .cart-summary td {
+            border: 1px solid #ddd;
+        }
+        .cart-summary th, .cart-summary td {
+            padding: 10px;
+            text-align: left;
+        }
+        .cart-summary th {
+            background-color: #f4f4f4;
+        }
+        .total {
+            text-align: right;
+            font-weight: bold;
+        }
+        .checkout-form {
+            margin-top: 20px;
+        }
+        .checkout-form label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        .checkout-form input, .checkout-form textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .checkout-form button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            border: none;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .checkout-form button:hover {
+            background-color: #218838;
+        }
+        /* Cash on Delivery with advanced styling */
+        .cod-section {
+            margin-top: 20px;
+            padding: 10px;
+            background: linear-gradient(135deg, #4CAF50, #3B8D40);
+            color: white;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .cod-section:hover {
+            transform: scale(1.05);
+        }
+        .cancel-btn {
+            padding: 10px 20px;
+            background-color: #dc3545;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .cancel-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Checkout</h1>
+        <div class="cart-summary">
+            <h2>Cart Summary</h2>
+            <table id="cart-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Cart items will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+            <div class="total">
+                <h3>Total: ₹<span id="cart-total">0</span></h3>
+            </div>
+        </div>
+        <div class="checkout-form">
+            <h2>Billing Details</h2>
+            <form id="checkout-form">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+                <label for="address">Address</label>
+                <textarea id="address" name="address" rows="4" required></textarea>
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+                <label for="date">Order Date</label>
+                <input type="date" id="order-date" name="date" required>
+                <label for="time">Order Time</label>
+                <input type="time" id="order-time" name="time" required>
+
+                <div class="cod-section">
+                    <h3>Cash on Delivery</h3>
+                    <p>Pay when your order is delivered.</p>
+                </div>
+
+                <button type="submit">Place Order</button>
+                <button type="button" class="cancel-btn" onclick="window.location.href='home.html'">Cancel Order</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Display cart items on checkout page
+        function displayCartItems() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartTableBody = document.querySelector('#cart-table tbody');
+            const cartTotalElement = document.getElementById('cart-total');
+            let totalAmount = 0;
+
+            cartTableBody.innerHTML = '';
+            cart.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>₹${item.price.toFixed(2)}</td>
+                    <td>${item.quantity}</td>
+                    <td>₹${(item.price * item.quantity).toFixed(2)}</td>
+                `;
+                cartTableBody.appendChild(row);
+                totalAmount += item.price * item.quantity;
+            });
+            cartTotalElement.textContent = totalAmount.toFixed(2);
+        }
+
+        displayCartItems();
+
+        // Handle form submission and store order details
+        document.getElementById('checkout-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const orderData = {};
+
+            formData.forEach((value, key) => {
+                orderData[key] = value;
+            });
+
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            orderData.cart = cart;
+
+            // Store order data in localStorage and redirect to order confirmation page
+            localStorage.setItem('order', JSON.stringify(orderData));
+            window.location.href = 'order-confirmation.html'; // Redirect to order confirmation page
+        }); async function processOrder(event) {
+            event.preventDefault();
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const user = {
+                name: document.getElementById('name').value,
+                address: document.getElementById('address').value,
+                phone: document.getElementById('phone').value
+            };
+
+            const response = await fetch('http://localhost:3000/api/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ cart, user })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            if (result.success) {
+                localStorage.removeItem('cart');
+                window.location.href = 'order-confirmation.html'; // Redirect on successful order
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harvest Haven Grocery</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 10px 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar .search-box {
+            display: flex;
+            align-items: center;
+            width: 50%;
+        }
+
+        .navbar .search-box input[type="text"] {
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar .search-box button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: none;
+            background-color: white;
+            color: #4CAF50;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar .search-box button:hover {
+            background-color: #f1f1f1;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-buttons button {
+            padding: 10px 15px;
+            border: none;
+            background-color: white;
+            color: #4CAF50;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-buttons button:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Banner Section */
+        .banner {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            background-color: #f4f4f4;
+        }
+
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Product Sections */
+        .products {
+            padding: 20px;
+            background-color: white;
+        }
+
+        .products h2 {
+            margin-bottom: 15px;
+        }
+
+        .product-list {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .product {
+            background-color: #f9f9f9;
+            padding: 20px;
+            width: 200px;
+            margin: 10px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .product img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .product .product-info {
+            margin-bottom: 10px;
+        }
+
+        .product .product-info h3 {
+            margin: 0;
+        }
+
+        .product .price {
+            font-size: 18px;
+            color: #4CAF50;
+            margin: 10px 0;
+        }
+
+        .product .quantity {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .product .quantity input {
+            width: 50px;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .product button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .product:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            Harvest Haven
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search for products...">
+            <button onclick="performSearch()">Search</button>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="nav-buttons">
+            <button onclick="window.location.href='cart.html'">Cart</button>
+            <button onclick="window.location.href='order-summary.html'">Orders</button>
+            
+            <button onclick="window.location.href='login.html'">Login</button>
+
+        </div>
+    </nav>
+
+    <!-- Banner Section -->
+    <div class="banner">
+        <img src="http://localhost:3000/images/banner.jpg"alt="Welcome to Harvest Haven">
+    </div>
+
+
+   <!-- Fruits -->
+   <div class="products">
+    <h2>Fruits</h2>
+    <div class="product-list">
+        <div class="product">
+            <img src="http://localhost:3000/images/apple.jpg" alt="Apple">
+            <div class="product-info">
+                <h3>Apple</h3>
+                <div class="price">₹100/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Apple', 100, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/banana.jpeg" alt="Banana">
+            <div class="product-info">
+                <h3>Banana</h3>
+                <div class="price">₹50/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Banana', 50, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/orange.jpg" alt="Orange">
+            <div class="product-info">
+                <h3>Orange</h3>
+                <div class="price">₹75/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Orange', 75, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/grapes.jpeg" alt="Grapes">
+            <div class="product-info">
+                <h3>Grapes</h3>
+                <div class="price">₹120/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Grapes', 120, this)">Add to Cart</button>
+        </div>
+        
+        <div class="product">
+            <img src="http://localhost:3000/images/mango.webp" alt="Mango">
+            <div class="product-info">
+                <h3>Mango</h3>
+                <div class="price">₹150/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Mango', 150, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/peach.jpg" alt="Peach">
+            <div class="product-info">
+                <h3>Peach</h3>
+                <div class="price">₹180/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Peach', 180, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/pineapple.jpg" alt="Pineapple">
+            <div class="product-info">
+                <h3>Pineapple</h3>
+                <div class="price">₹140/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Pineapple', 140, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/strawberry.jpeg" alt="Strawberry">
+            <div class="product-info">
+                <h3>Strawberry</h3>
+                <div class="price">₹200/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Strawberry', 200, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/Watermelon.jpeg" alt="Watermelon">
+            <div class="product-info">
+                <h3>Watermelon</h3>
+                <div class="price">₹50/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Watermelon', 50, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/Cherry.jpg" alt="Cherry">
+            <div class="product-info">
+                <h3>Cherry</h3>
+                <div class="price">₹250/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Cherry', 250, this)">Add to Cart</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- Vegetables -->
+<div class="products">
+    <h2>Vegetables</h2>
+    <div class="product-list">
+        <div class="product">
+            <img src="http://localhost:3000/images/carrot.avif" alt="Carrot">
+            <div class="product-info">
+                <h3>Carrot</h3>
+                <div class="price">₹80/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Carrot', 80, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/broccoli.jpeg" alt="Broccoli">
+            <div class="product-info">
+                <h3>Broccoli</h3>
+                <div class="price">₹90/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Broccoli', 90, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/spinach.jpeg" alt="Spinach">
+            <div class="product-info">
+                <h3>Spinach</h3>
+                <div class="price">₹70/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Spinach', 70, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/potato.jpeg" alt="Potato">
+            <div class="product-info">
+                <h3>Potato</h3>
+                <div class="price">₹40/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Potato', 40, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/tomato.jpeg" alt="Tomato">
+            <div class="product-info">
+                <h3>Tomato</h3>
+                <div class="price">₹60/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Tomato', 60, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/onion.jpeg" alt="Onion">
+            <div class="product-info">
+                <h3>Onion</h3>
+                <div class="price">₹50/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Onion', 50, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/cucumber.jpeg" alt="Cucumber">
+            <div class="product-info">
+                <h3>Cucumber</h3>
+                <div class="price">₹40/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Cucumber', 40, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/bell+pepper.jpeg" alt="Bell Pepper">
+            <div class="product-info">
+                <h3>Bell Pepper</h3>
+                <div class="price">₹110/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Bell Pepper', 110, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/cauliflower.jpeg" alt="Cauliflower">
+            <div class="product-info">
+                <h3>Cauliflower</h3>
+                <div class="price">₹90/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Cauliflower', 90, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/zucchini.jpeg" alt="Zucchini">
+            <div class="product-info">
+                <h3>Zucchini</h3>
+                <div class="price">₹100/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Zucchini', 100, this)">Add to Cart</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- Dairy Products -->
+<div class="products">
+    <h2>Dairy Products</h2>
+    <div class="product-list">
+        <div class="product">
+            <img src="http://localhost:3000/images/milk.jpeg" alt="Milk">
+            <div class="product-info">
+                <h3>Milk</h3>
+                <div class="price">₹60/litre</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Milk', 60, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/cheese.jpeg" alt="Cheese">
+            <div class="product-info">
+                <h3>Cheese</h3>
+                <div class="price">₹400/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Cheese', 400, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/butter.jpeg" alt="Butter">
+            <div class="product-info">
+                <h3>Butter</h3>
+                <div class="price">₹300/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Butter', 300, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/yogurt.jpeg" alt="Yogurt">
+            <div class="product-info">
+                <h3>Yogurt</h3>
+                <div class="price">₹80/litre</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Yogurt', 80, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/cottage+cheese.jpg" alt="Cottage Cheese">
+            <div class="product-info">
+                <h3>Cottage Cheese</h3>
+                <div class="price">₹350/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Cottage Cheese', 350, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/cream.jpg" alt="Cream">
+            <div class="product-info">
+                <h3>Cream</h3>
+                <div class="price">₹200/litre</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Cream', 200, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/skim+milk.jpeg" alt="Skim Milk">
+            <div class="product-info">
+                <h3>Skim Milk</h3>
+                <div class="price">₹55/litre</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Skim Milk', 55, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/kefir.jpeg" alt="Kefir">
+            <div class="product-info">
+                <h3>Kefir</h3>
+                <div class="price">₹90/litre</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Kefir', 90, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/buttermilk.jpeg" alt="Buttermilk">
+            <div class="product-info">
+                <h3>Buttermilk</h3>
+                <div class="price">₹70/litre</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Buttermilk', 70, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/ghee.jpeg" alt="Ghee">
+            <div class="product-info">
+                <h3>Ghee</h3>
+                <div class="price">₹600/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Ghee', 600, this)">Add to Cart</button>
+        </div>
+    </div>
+</div>
+
+<!-- Grains -->
+<div class="products">
+    <h2>Grains</h2>
+    <div class="product-list">
+        <div class="product">
+            <img src="http://localhost:3000/images/rice.jpeg" alt="Rice">
+            <div class="product-info">
+                <h3>Rice</h3>
+                <div class="price">₹80/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Rice', 80, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/wheat.jpeg" alt="Wheat">
+            <div class="product-info">
+                <h3>Wheat</h3>
+                <div class="price">₹70/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Wheat', 70, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/oats.jpeg" alt="Oats">
+            <div class="product-info">
+                <h3>Oats</h3>
+                <div class="price">₹90/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Oats', 90, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/barley.jpeg" alt="Barley">
+            <div class="product-info">
+                <h3>Barley</h3>
+                <div class="price">₹100/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Barley', 100, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/quinoa.jpeg" alt="Quinoa">
+            <div class="product-info">
+                <h3>Quinoa</h3>
+                <div class="price">₹250/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Quinoa', 250, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/millet.jpeg" alt="Millet">
+            <div class="product-info">
+                <h3>Millet</h3>
+                <div class="price">₹120/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Millet', 120, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/ragi.jpeg" alt="Ragi">
+            <div class="product-info">
+                <h3>Ragi</h3>
+                <div class="price">₹130/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Ragi', 130, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/amaranth.jpeg" alt="Amaranth">
+            <div class="product-info">
+                <h3>Amaranth</h3>
+                <div class="price">₹180/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Amaranth', 180, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/chia+seeds.jpeg" alt="Chia Seeds">
+            <div class="product-info">
+                <h3>Chia Seeds</h3>
+                <div class="price">₹250/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Chia Seeds', 250, this)">Add to Cart</button>
+        </div>
+        <div class="product">
+            <img src="http://localhost:3000/images/flaxseeds.jpeg" alt="Flaxseeds">
+            <div class="product-info">
+                <h3>Flaxseeds</h3>
+                <div class="price">₹220/kg</div>
+                <div class="quantity">
+                    <input type="number" value="1" min="1">
+                </div>
+            </div>
+            <button onclick="addToCart('Flaxseeds', 220, this)">Add to Cart</button>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    
+         // Fetch products from API and display them
+         document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('http://localhost:3000/api/products');
+                const products = await response.json();
+                displayProducts(products);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+        // Display products dynamically
+        function displayProducts(products) {
+            const productContainer = document.getElementById('product-container');
+            productContainer.innerHTML = ''; // Clear existing content
+
+            products.forEach(product => {
+                productContainer.innerHTML += `
+                    <div class="product">
+                        <img src="${product.imageUrl}" alt="${product.name}">
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <div class="price">₹${product.price}/kg</div>
+                            <div class="quantity">
+                                <input type="number" value="1" min="1">
+                            </div>
+                            <button onclick="addToCart('${product.name}', ${product.price}, this)">Add to Cart</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Add product to cart
+        // Add product to cart
+function addToCart(productName, productPrice, element) {
+    const productImage = element.closest('.product').querySelector('img').src; // Fetch image URL
+    let quantity = element.previousElementSibling.querySelector('input').value; // Get quantity from input
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // Check if the product already exists in the cart
+    let existingProduct = cart.find(item => item.name === productName);
+    
+    if (existingProduct) {
+        // Update quantity if product already exists in the cart
+        existingProduct.quantity = parseInt(existingProduct.quantity) + parseInt(quantity);
+    } else {
+        // Add new product to the cart with image URL
+        cart.push({
+            name: productName,
+            price: productPrice,
+            quantity: parseInt(quantity),
+            imageUrl: productImage // Store image URL
+        });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(`${productName} added to the cart!`);
+}
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (query) {
+                window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+            } else {
+                alert('Please enter a search query.');
+            }
+        }
+    </script>
+    
+    
+</body>
+</html>
+
+
+
+
